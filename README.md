@@ -1,12 +1,15 @@
 # hitemp
 
-Automatically download &amp; parse [HITEMP](https://hitran.org/hitemp/) line 
-lists to a Pandas DataFrame
+Automatically download &amp; parse the latest [HITEMP](https://hitran.org/hitemp/) line 
+lists to a Pandas DataFrame: 
+- A local cache is created for fast retrieval. 
+- Available molecules : ``CH4, CO, N2O, NO, NO2, OH``.
+- Not available yet: ``CO2, H2O``.
 
 ### Install:
 
-```
-!pip install hitemp
+```bash
+pip install hitemp
 ```
 
 ### Use:
@@ -18,7 +21,7 @@ df = hitemp.fetch("OH")
 
 Then use Pandas to explore the database:
 
-```
+```python
 >>> print(df.columns)
 Index(['id', 'iso', 'wav', 'int', 'A', 'airbrd', 'selbrd', 'El', 'Tdpair',
        'Pshft', 'globu', 'globl', 'locu', 'locl', 'ierr', 'iref', 'lmix', 'gp',
@@ -44,15 +47,29 @@ Index(['id', 'iso', 'wav', 'int', 'A', 'airbrd', 'selbrd', 'El', 'Tdpair',
 Get only specific isotope, or wavenumber range (the whole database is still downloaded 
 on the first call):
 
-```
+```python
 df = hitemp.fetch("OH", isotope='1,2,3', load_wavenum_min=3500, load_wavenum_max=4500)
 ```
 
+### References
+
+Cite the HITEMP database (see the [HITRAN website](https://hitran.org/hitemp/) for up-to-date references !)
+
+> [1] L. S. Rothman, I. E. Gordon, R. J. Barber, H. Dothe, R. R. Gamache, A. Goldman, V. Perevalov, S. A. Tashkun, J. Tennyson, "HITEMP, the high-temperature molecular spectroscopic database", J. Quant. Spectrosc. Radiat. Transfer 111, 2139-2150 (2010).
+
+> [2] L. S. Rothman, R. B. Wattson, R. R. Gamache, J. Schroeder, A. McCann, "HITRAN, HAWKS and HITEMP: High-Temperature Molecular Database", Proc. SPIE, Atmospheric Propogation and Remote Sensing IV 2471, 105-111 (1995).
+
+> [3] R. J. Hargreaves, I. E. Gordon, L. S. Rothman, S. A. Tashkun, V. I. Perevalov, S. N. Yurchenko, J. Tennyson, H. S. P. Müller, "Spectroscopic line parameters of NO, NO2, and N2O for the HITEMP database", J. Quant. Spectrosc. Radiat. Transfer 232, 35-53 (2019).
+
+> [4] R. J. Hargreaves, I. E. Gordon, M. Rey, A. V. Nikitin, V. G. Tyuterev, R. V. Kochanov, L. S. Rothman, "An accurate, extensive, and practical line list of methane for the HITEMP database", Astrophys. J. Supp. Ser. 247, 55 (2020).
+
+> [5] G. Li, I. E. Gordon, L. S. Rothman, Y. Tan, S.-M. Hu, S. Kassi, A. Campargue, E. S. Medvedev, "Rovibrational line lists for nine isotopologues of the CO molecule in the X1Σ+ ground electronic state", Astrophys. J. Supp. Ser. 216, 15 (2015).
+
+
 ### Implementation:
 
-Uses the [🌱 RADIS](http://radis.github.io/) 
-[fetch_hitemp()](https://radis.readthedocs.io/en/latest/source/radis.io.hitemp.html) 
-function : 
-Stream HITEMP file from the [HITRAN website](https://hitran.org/hitemp/) 
-Unzip and build a local HDF5 file directly, in ``local_databases=~/.radisdb`` by default.
-Returns a Pandas DataFrame containing all the lines.
+Uses the [fetch_hitemp()](https://radis.readthedocs.io/en/latest/source/radis.io.hitemp.html) 
+function from the [🌱 RADIS](http://radis.github.io/) line-by-line code: 
+- stream HITEMP file from the [HITRAN website](https://hitran.org/hitemp/) 
+- unzip and build a local HDF5 file directly, in ``local_databases=~/.radisdb`` by default.
+- returns a Pandas DataFrame containing all the lines.
